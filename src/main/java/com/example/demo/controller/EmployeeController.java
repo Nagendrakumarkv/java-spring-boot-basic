@@ -1,41 +1,37 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Employee;
+import com.example.demo.entity.Department;
 import com.example.demo.service.EmployeeService;
+import com.example.demo.service.DepartmentService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
-    private final EmployeeService service;
+    private final EmployeeService employeeService;
+    private final DepartmentService departmentService;
 
-    public EmployeeController(EmployeeService service) {
-        this.service = service;
+    public EmployeeController(EmployeeService employeeService, DepartmentService departmentService) {
+        this.employeeService = employeeService;
+        this.departmentService = departmentService;
     }
 
     @GetMapping
     public List<Employee> getAllEmployees() {
-        return service.getAllEmployees();
-    }
-
-    @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable Long id) {
-        return service.getEmployeeById(id);
+        return employeeService.getAllEmployees();
     }
 
     @PostMapping
-    public Employee createEmployee(@RequestBody Employee employee) {
-        return service.saveEmployee(employee);
+    public Employee createEmployee(@RequestBody Employee employee, @RequestParam Long departmentId) {
+        Department department = departmentService.getDepartmentById(departmentId);
+        employee.setDepartment(department);
+        return employeeService.saveEmployee(employee);
     }
 
-    @PutMapping("/{id}")
-    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
-        return service.updateEmployee(id, employee);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteEmployee(@PathVariable Long id) {
-        service.deleteEmployee(id);
+    @GetMapping("/by-department")
+    public List<Employee> getEmployeesByDepartment(@RequestParam String departmentName) {
+        return employeeService.getEmployeesByDepartmentName(departmentName);
     }
 }

@@ -7,36 +7,21 @@ import java.util.List;
 
 @Service
 public class EmployeeService {
-    private final EmployeeRepository repository;
+    private final EmployeeRepository employeeRepository;
 
-    public EmployeeService(EmployeeRepository repository) {
-        this.repository = repository;
+    public EmployeeService(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
     public List<Employee> getAllEmployees() {
-        return repository.findAll();
-    }
-
-    public Employee getEmployeeById(Long id) {
-        return repository.findById(id).orElse(null);
+        return employeeRepository.findAll();
     }
 
     public Employee saveEmployee(Employee employee) {
-        return repository.save(employee);
+        return employeeRepository.save(employee);
     }
 
-    public Employee updateEmployee(Long id, Employee updated) {
-        Employee existing = repository.findById(id).orElse(null);
-        if (existing != null) {
-            existing.setName(updated.getName());
-            existing.setDepartment(updated.getDepartment());
-            existing.setSalary(updated.getSalary());
-            return repository.save(existing);
-        }
-        return null;
-    }
-
-    public void deleteEmployee(Long id) {
-        repository.deleteById(id);
+    public List<Employee> getEmployeesByDepartmentName(String departmentName) {
+        return employeeRepository.findByDepartmentName(departmentName);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +14,11 @@ public class Employee {
     private Long id;
 
     private String name;
-    private String department;
     private double salary;
+
+    // Many employees belong to one department
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    @JsonBackReference
+    private Department department;
 }
