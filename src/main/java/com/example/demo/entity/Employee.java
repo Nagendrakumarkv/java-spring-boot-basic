@@ -1,24 +1,26 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "employees")
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-    private double salary;
+    private Double salary;
 
-    // Many employees belong to one department
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id")
-    @JsonBackReference
-    private Department department;
+    public Employee() {}
+
+    public Employee(String name, Double salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
 }
