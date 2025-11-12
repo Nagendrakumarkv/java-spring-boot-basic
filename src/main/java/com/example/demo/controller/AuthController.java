@@ -10,9 +10,12 @@ import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 import java.util.Set;
 
+@Tag(name = "Authentication", description = "User registration and login")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -27,6 +30,7 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @Operation(summary = "Register a User")
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody AuthRequest req) {
         // default role USER
@@ -34,6 +38,7 @@ public class AuthController {
         return ResponseEntity.ok("User created: " + created.getUsername());
     }
 
+    @Operation(summary = "Login a User")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest req) {
         Authentication auth = authenticationManager.authenticate(
